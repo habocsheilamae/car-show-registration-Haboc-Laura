@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import KpiCards from '../components/KpiCards.jsx';
 import RegistrationFilters from '../components/RegistrationFilters.jsx';
 import RegistrationTable from '../components/RegistrationTable.jsx';
@@ -12,6 +12,15 @@ function RegistrationsPage() {
   const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setIsLoading(false);
+  }, 500);
+
+  return () => clearTimeout(timer);
+}, []);
 
   const debouncedName = useDebounce(participantName, 400);
 
@@ -105,7 +114,11 @@ function RegistrationsPage() {
         />
       </div>
 
-       {currentRegistrations.length === 0 ? (
+       {isLoading ? (
+  <p className="loading-message">
+    Loading registrations...
+  </p>
+) : currentRegistrations.length === 0 ? (
   <div className="empty-state">
     <h3>No registrations found</h3>
     <p>

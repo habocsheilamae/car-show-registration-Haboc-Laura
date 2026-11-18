@@ -1,0 +1,11 @@
+# Visual Studio / C#
+[Bb]in/
+[Oo]bj/
+.vs/
+*.db
+*.db-shm
+*.db-wal
+
+# Node / React
+node_modules/
+dist/

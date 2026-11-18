@@ -105,14 +105,14 @@ function RegistrationsPage() {
         />
       </div>
 
-       
-{false ? (
-  <p className="loading-message">Loading registrations...</p>
-) : false ? (
-  <div className="error-state">
-    <p>Cannot reach the API. Please try again.</p>
-    <button type="button" onClick={() => window.location.reload()}>
-      Try again
+       {currentRegistrations.length === 0 ? (
+  <div className="empty-state">
+    <h3>No registrations found</h3>
+    <p>
+      There are no registrations matching your search or filters.
+    </p>
+    <button type="button" onClick={handleClearFilters}>
+      Clear filters
     </button>
   </div>
 ) : (
@@ -121,7 +121,6 @@ function RegistrationsPage() {
     onClear={handleClearFilters}
   />
 )}
-
 
       <Pagination
         page={page}

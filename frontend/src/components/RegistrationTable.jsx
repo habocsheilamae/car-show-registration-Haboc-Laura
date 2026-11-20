@@ -1,3 +1,4 @@
+
 import StatusBadge from './StatusBadge.jsx';
 import PaymentBadge from './PaymentBadge.jsx';
 
@@ -15,18 +16,27 @@ function RegistrationTable({ registrations = [], onClear }) {
   }
 
   return (
-    <div className="table-container">
+    <div
+      className="table-container"
+      role="region"
+      aria-label="Registration records"
+      tabIndex={0}
+    >
       <table>
+        <caption className="visually-hidden">
+          Car show participant registration records
+        </caption>
+
         <thead>
           <tr>
-            <th>Reg. No.</th>
-            <th>Date</th>
-            <th>Participant</th>
-            <th>Car</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Fee / Paid</th>
-            <th>Payment</th>
+            <th scope="col">Reg. No.</th>
+            <th scope="col">Date</th>
+            <th scope="col">Participant</th>
+            <th scope="col">Car</th>
+            <th scope="col">Type</th>
+            <th scope="col">Status</th>
+            <th scope="col">Fee / Paid</th>
+            <th scope="col">Payment</th>
           </tr>
         </thead>
 
@@ -36,7 +46,9 @@ function RegistrationTable({ registrations = [], onClear }) {
               <td>{registration.registrationNumber}</td>
               <td>{registration.registrationDate}</td>
               <td>{registration.participantName}</td>
-              <td>{registration.carMake} {registration.carModel}</td>
+              <td>
+                {registration.carMake} {registration.carModel}
+              </td>
               <td>{registration.registrationType}</td>
               <td>
                 <StatusBadge status={registration.status} />

@@ -13,6 +13,7 @@ function RegistrationsPage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
   const timer = setTimeout(() => {
@@ -21,6 +22,15 @@ function RegistrationsPage() {
 
   return () => clearTimeout(timer);
 }, []);
+
+   function handleRetry() {
+  setError('');
+  setIsLoading(true);
+
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 500);
+}
 
   const debouncedName = useDebounce(participantName, 400);
 
@@ -118,6 +128,14 @@ function RegistrationsPage() {
   <p className="loading-message">
     Loading registrations...
   </p>
+) : error ? (
+  <div className="error-state">
+    <h3>Something went wrong</h3>
+    <p>{error}</p>
+    <button type="button" onClick={handleRetry}>
+      Try again
+    </button>
+  </div>
 ) : currentRegistrations.length === 0 ? (
   <div className="empty-state">
     <h3>No registrations found</h3>

@@ -1,9 +1,17 @@
+
 function StatusBadge({ status }) {
-  const statusClass = status?.toLowerCase() || 'unknown';
+  const displayStatus = status || 'Unknown';
+  const statusClass = status
+    ? status.toLowerCase().replace(/\s+/g, '-')
+    : 'unknown';
 
   return (
-    <span className={`status-badge status-${statusClass}`}>
-      {status || 'Unknown'}
+    <span
+      className={`status-badge status-${statusClass}`}
+      role="status"
+      aria-label={`Registration status: ${displayStatus}`}
+    >
+      {displayStatus}
     </span>
   );
 }

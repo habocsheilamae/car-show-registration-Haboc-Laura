@@ -391,3 +391,16 @@ td {
     gap: 10px;
   }
 }
+
+/* Unknown Registration Status */
+.status-unknown {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+/* Checked In Registration Status */
+.status-checked-in {
+  background: #dbeafe;
+  color: #1e40af;
+}
+

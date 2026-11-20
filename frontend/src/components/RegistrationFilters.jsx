@@ -1,3 +1,4 @@
+
 function RegistrationFilters({
   participantName,
   setParticipantName,
@@ -8,15 +9,20 @@ function RegistrationFilters({
   onClear,
 }) {
   return (
-    <section className="registration-filters">
+    <section
+      className="registration-filters"
+      aria-label="Registration filters"
+    >
       <input
         type="text"
-        placeholder="Search participant..."
+        placeholder="Search by participant name..."
+        aria-label="Search participant by name"
         value={participantName}
         onChange={(event) => setParticipantName(event.target.value)}
       />
 
       <select
+        aria-label="Filter by registration type"
         value={type}
         onChange={(event) => setType(event.target.value)}
       >
@@ -26,6 +32,7 @@ function RegistrationFilters({
       </select>
 
       <select
+        aria-label="Filter by registration status"
         value={status}
         onChange={(event) => setStatus(event.target.value)}
       >
@@ -36,8 +43,12 @@ function RegistrationFilters({
         <option value="Rejected">Rejected</option>
       </select>
 
-      <button type="button" onClick={onClear}>
-        Clear
+      <button
+        type="button"
+        onClick={onClear}
+        aria-label="Clear all registration filters"
+      >
+        Clear Filters
       </button>
     </section>
   );

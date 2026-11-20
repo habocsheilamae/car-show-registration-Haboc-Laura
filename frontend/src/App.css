@@ -315,3 +315,79 @@ td {
   padding: 30px;
   color: #6b7280;
 }
+
+
+/* Additional Responsive and Accessibility Improvements */
+
+.registration-filters input:focus,
+.registration-filters select:focus,
+.registration-filters button:focus-visible,
+.pagination button:focus-visible,
+.pagination-info select:focus-visible,
+.empty-state button:focus-visible,
+.error-state button:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+.table-container:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 14px;
+  }
+
+  header h1 {
+    font-size: 1.6rem;
+  }
+
+  header h2 {
+    font-size: 1.15rem;
+  }
+
+  .kpi-cards {
+    gap: 12px;
+  }
+
+  .kpi-card {
+    padding: 16px;
+  }
+
+  .kpi-value {
+    font-size: 1.5rem;
+    overflow-wrap: anywhere;
+  }
+
+  .pagination-container {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .pagination-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 360px) {
+  main {
+    padding: 10px;
+  }
+
+  .kpi-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

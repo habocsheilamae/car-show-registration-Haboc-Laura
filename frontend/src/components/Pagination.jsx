@@ -1,3 +1,4 @@
+
 function Pagination({
   page,
   totalPages,
@@ -11,10 +12,15 @@ function Pagination({
 
   return (
     <div className="pagination-container">
-      <div className="pagination">
+      <div
+        className="pagination"
+        aria-label="Registration pages"
+      >
         <button
+          type="button"
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
+          aria-label="Go to previous page"
         >
           Previous
         </button>
@@ -22,9 +28,12 @@ function Pagination({
         {Array.from({ length: totalPages }, (_, index) => index + 1).map(
           (pageNumber) => (
             <button
+              type="button"
               key={pageNumber}
               className={page === pageNumber ? 'active-page' : ''}
               onClick={() => onPageChange(pageNumber)}
+              aria-label={`Go to page ${pageNumber}`}
+              aria-current={page === pageNumber ? 'page' : undefined}
             >
               {pageNumber}
             </button>
@@ -32,8 +41,10 @@ function Pagination({
         )}
 
         <button
+          type="button"
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages || totalPages === 0}
+          aria-label="Go to next page"
         >
           Next
         </button>

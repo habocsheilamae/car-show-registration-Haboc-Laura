@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Common;
@@ -8,9 +9,11 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Database
+// Database (SQLite)
+var connectionString = builder.Configuration.GetConnectionString("Default")
+    ?? "Data Source=carshow.db";
 builder.Services.AddDbContext<IAppDbContext, AppDbContext>(options =>
-    options.UseInMemoryDatabase("VerticalSliceDb"));
+    options.UseSqlite(connectionString));
 
 // Validators
 builder.Services.AddValidatorsFromAssembly(typeof(IAppDbContext).Assembly);
@@ -19,29 +22,40 @@ builder.Services.AddValidatorsFromAssembly(typeof(IAppDbContext).Assembly);
 // builder.Services.AddScoped<ICommandHandler<TCommand, Result<TResponse>>, TCommandHandler>();
 // builder.Services.AddScoped<IQueryHandler<TQuery, Result<TResponse>>, TQueryHandler>();
 
+// JSON: enums as strings (e.g. "VIP", "CheckedIn")
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+// CORS: allow the React dev server
+builder.Services.AddCors(options =>
+    options.AddPolicy("Frontend", policy =>
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()));
+
 // API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, _, _) =>
     {
-        document.Info.Title = "Vertical Slice API Template by Elvin Manuel R. Luces, MIT";
-        document.Info.Description = "A simple API demonstrating Vertical Slice Architecture";
+        document.Info.Title = "Car Show Registration API";
+        document.Info.Description = "Vertical Slice API for Car Show 2027 registrations";
         return Task.CompletedTask;
     });
 });
 
 var app = builder.Build();
 
-// Seed data
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+// Apply migrations + seed (enable AFTER creating the InitialCreate migration)
+ using (var scope = app.Services.CreateScope())
+ {
+     var dbContext = (AppDbContext)scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+     dbContext.Database.Migrate();
+     // seeding comes later
+ }
 
-    // dbContext.<Entities>.AddRange(...);
-
-    dbContext.SaveChanges();
-}
+app.UseCors("Frontend");
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
@@ -51,9 +65,9 @@ if (app.Environment.IsDevelopment())
 }
 
 // Root endpoint
-app.MapGet("/", () => "Welcome to the Vertical Slice API! Go to /scalar/v1 for API documentation.");
+app.MapGet("/", () => "Welcome to the Car Show Registration API! Go to /scalar/v1 for API documentation.");
 
 // Map endpoints
-// app.Map{FeatureGroup}Endpoints();
+// app.MapRegistrationEndpoints();
 
 app.Run();

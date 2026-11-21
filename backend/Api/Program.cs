@@ -9,6 +9,8 @@ using Scalar.AspNetCore;
 using Api.Features.Registrations;
 using Application.Features.Registrations.CreateRegistration;
 using Application.Features.Registrations.GetRegistrations;
+using Application.Features.Registrations.GetRegistrationById;
+using Application.Features.Registrations.GetRegistrationSummary;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,9 +27,18 @@ builder.Services.AddValidatorsFromAssembly(typeof(IAppDbContext).Assembly);
 builder.Services.AddScoped<
     ICommandHandler<CreateRegistrationCommand, Result<CreateRegistrationResponse>>,
     CreateRegistrationHandler>();
+
 builder.Services.AddScoped<
     IQueryHandler<GetRegistrationsQuery, Result<GetRegistrationsResponse>>,
     GetRegistrationsHandler>();
+
+builder.Services.AddScoped<
+    IQueryHandler<GetRegistrationByIdQuery, Result<GetRegistrationByIdResponse>>,
+    GetRegistrationByIdHandler>();
+
+builder.Services.AddScoped<
+    IQueryHandler<GetRegistrationSummaryQuery, Result<GetRegistrationSummaryResponse>>,
+    GetRegistrationSummaryHandler>();
 // builder.Services.AddScoped<ICommandHandler<TCommand, Result<TResponse>>, TCommandHandler>();
 // builder.Services.AddScoped<IQueryHandler<TQuery, Result<TResponse>>, TQueryHandler>();
 

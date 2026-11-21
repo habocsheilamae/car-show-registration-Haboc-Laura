@@ -7,8 +7,8 @@ Course: Integrative Programming 2, CCDI Sorsogon Campus.
 
 | Member | Role |
 |---|---|
-| <John Jared Laura> | Backend Developer |
-| <Sheila Mae Haboc> | Frontend Developer |
+| John Jared Laura | Backend Developer |
+| Sheila Mae Haboc | Frontend Developer |
 
 ## Tech stack
 

@@ -1,77 +1,82 @@
+
 import { useState, useEffect } from 'react';
 import KpiCards from '../components/KpiCards.jsx';
 import RegistrationFilters from '../components/RegistrationFilters.jsx';
 import RegistrationTable from '../components/RegistrationTable.jsx';
 import Pagination from '../components/Pagination.jsx';
-import { sampleRegistrations } from '../api/sample-data.js';
+import {
+  getRegistrations,
+  getRegistrationSummary,
+} from '../api/registrationsApi.js';
 import useDebounce from '../hooks/useDebounce.js';
 
 function RegistrationsPage() {
   const [participantName, setParticipantName] = useState('');
   const [type, setType] = useState('');
   const [status, setStatus] = useState('');
+
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+
+  const [registrations, setRegistrations] = useState([]);
+  const [summary, setSummary] = useState({
+    totalRegistrations: 0,
+    totalPayments: 0,
+    uncollectedPayments: 0,
+    confirmed: 0,
+    checkedIn: 0,
+  });
+
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-  const timer = setTimeout(() => {
-    setIsLoading(false);
-  }, 500);
-
-  return () => clearTimeout(timer);
-}, []);
-
-   function handleRetry() {
-  setError('');
-  setIsLoading(true);
-
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 500);
-}
+  const [retryCount, setRetryCount] = useState(0);
 
   const debouncedName = useDebounce(participantName, 400);
 
-  const filteredRegistrations = sampleRegistrations.filter((registration) => {
-    const matchesName = registration.participantName
-      .toLowerCase()
-      .includes(debouncedName.toLowerCase());
+  useEffect(() => {
+    const controller = new AbortController();
 
-    const matchesType = !type || registration.registrationType === type;
-    const matchesStatus = !status || registration.status === status;
+    async function loadDashboard() {
+      try {
+        setIsLoading(true);
+        setError('');
 
-    return matchesName && matchesType && matchesStatus;
-  });
+        const [registrationData, summaryData] = await Promise.all([
+          getRegistrations({
+            participantName: debouncedName,
+            type,
+            status,
+            page,
+            pageSize,
+            signal: controller.signal,
+          }),
+          getRegistrationSummary({
+            signal: controller.signal,
+          }),
+        ]);
 
-  const totalPages = Math.ceil(filteredRegistrations.length / pageSize);
+        setRegistrations(registrationData.items);
+        setTotalPages(registrationData.totalPages);
+        setTotalCount(registrationData.totalCount);
+        setSummary(summaryData);
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          setError(err.message || 'Unable to load dashboard data.');
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
+      }
+    }
 
-  const startIndex = (page - 1) * pageSize;
+    loadDashboard();
 
-  const currentRegistrations = filteredRegistrations.slice(
-    startIndex,
-    startIndex + pageSize
-  );
-
-  const totalPayments = sampleRegistrations.reduce(
-    (total, registration) => total + registration.amountPaid,
-    0
-  );
-
-  const uncollectedPayments = sampleRegistrations.reduce(
-    (total, registration) =>
-      total + (registration.fee - registration.amountPaid),
-    0
-  );
-
-  const confirmed = sampleRegistrations.filter(
-    (registration) => registration.status === 'Approved'
-  ).length;
-
-  const checkedIn = sampleRegistrations.filter(
-    (registration) => registration.status === 'Checked In'
-  ).length;
+    return () => controller.abort();
+  }, [debouncedName, type, status, page, pageSize, retryCount]);
 
   function handlePageSizeChange(newSize) {
     setPageSize(newSize);
@@ -85,6 +90,10 @@ function RegistrationsPage() {
     setPage(1);
   }
 
+  function handleRetry() {
+    setRetryCount((count) => count + 1);
+  }
+
   return (
     <main>
       <header>
@@ -94,11 +103,11 @@ function RegistrationsPage() {
       </header>
 
       <KpiCards
-        totalRegistrations={sampleRegistrations.length}
-        totalPayments={totalPayments}
-        uncollectedPayments={uncollectedPayments}
-        confirmed={confirmed}
-        checkedIn={checkedIn}
+        totalRegistrations={summary.totalRegistrations}
+        totalPayments={summary.totalPayments}
+        uncollectedPayments={summary.uncollectedPayments}
+        confirmed={summary.confirmed}
+        checkedIn={summary.checkedIn}
       />
 
       <div className="registrations-toolbar">
@@ -124,39 +133,39 @@ function RegistrationsPage() {
         />
       </div>
 
-       {isLoading ? (
-  <p className="loading-message">
-    Loading registrations...
-  </p>
-) : error ? (
-  <div className="error-state">
-    <h3>Something went wrong</h3>
-    <p>{error}</p>
-    <button type="button" onClick={handleRetry}>
-      Try again
-    </button>
-  </div>
-) : currentRegistrations.length === 0 ? (
-  <div className="empty-state">
-    <h3>No registrations found</h3>
-    <p>
-      There are no registrations matching your search or filters.
-    </p>
-    <button type="button" onClick={handleClearFilters}>
-      Clear filters
-    </button>
-  </div>
-) : (
-  <RegistrationTable
-    registrations={currentRegistrations}
-    onClear={handleClearFilters}
-  />
-)}
+      {isLoading ? (
+        <p className="loading-message">
+          Loading registrations...
+        </p>
+      ) : error ? (
+        <div className="error-state">
+          <h3>Something went wrong</h3>
+          <p>{error}</p>
+          <button type="button" onClick={handleRetry}>
+            Try again
+          </button>
+        </div>
+      ) : registrations.length === 0 ? (
+        <div className="empty-state">
+          <h3>No registrations found</h3>
+          <p>
+            There are no registrations matching your search or filters.
+          </p>
+          <button type="button" onClick={handleClearFilters}>
+            Clear filters
+          </button>
+        </div>
+      ) : (
+        <RegistrationTable
+          registrations={registrations}
+          onClear={handleClearFilters}
+        />
+      )}
 
       <Pagination
         page={page}
         totalPages={totalPages}
-        totalItems={filteredRegistrations.length}
+        totalItems={totalCount}
         pageSize={pageSize}
         onPageChange={setPage}
         onPageSizeChange={handlePageSizeChange}

@@ -44,17 +44,17 @@ function RegistrationTable({ registrations = [], onClear }) {
           {registrations.map((registration) => (
             <tr key={registration.id}>
               <td>{registration.registrationNumber}</td>
-              <td>{registration.registrationDate}</td>
-              <td>{registration.participantName}</td>
               <td>
-                {registration.carMake} {registration.carModel}
+                {new Date(registration.registrationDate).toLocaleDateString('en-PH')}
               </td>
+              <td>{registration.participantName}</td>
+              <td>{registration.carMakeModel}</td>
               <td>{registration.registrationType}</td>
               <td>
                 <StatusBadge status={registration.status} />
               </td>
               <td>
-                ₱{Number(registration.fee).toLocaleString('en-PH')}
+                ₱{Number(registration.registrationFee).toLocaleString('en-PH')}
                 {' / '}
                 ₱{Number(registration.amountPaid).toLocaleString('en-PH')}
               </td>

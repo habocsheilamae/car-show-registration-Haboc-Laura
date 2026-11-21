@@ -1,8 +1,11 @@
-
 function StatusBadge({ status }) {
-  const displayStatus = status || 'Unknown';
+  const displayStatus =
+    status === 'CheckedIn' ? 'Checked In' : status || 'Unknown';
+
   const statusClass = status
-    ? status.toLowerCase().replace(/\s+/g, '-')
+    ? status === 'CheckedIn'
+      ? 'checked-in'
+      : status.toLowerCase().replace(/\s+/g, '-')
     : 'unknown';
 
   return (

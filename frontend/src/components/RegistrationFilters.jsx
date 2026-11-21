@@ -27,7 +27,8 @@ function RegistrationFilters({
         onChange={(event) => setType(event.target.value)}
       >
         <option value="">All Types</option>
-        <option value="Regular">Regular</option>
+        <option value="Exhibitor">Exhibitor</option>
+        <option value="Competitor">Competitor</option>
         <option value="VIP">VIP</option>
       </select>
 
@@ -37,10 +38,10 @@ function RegistrationFilters({
         onChange={(event) => setStatus(event.target.value)}
       >
         <option value="">All Statuses</option>
-        <option value="Approved">Approved</option>
+        <option value="Confirmed">Confirmed</option>
         <option value="Pending">Pending</option>
-        <option value="Checked In">Checked In</option>
-        <option value="Rejected">Rejected</option>
+        <option value="CheckedIn">Checked In</option>
+        <option value="Cancelled">Cancelled</option>
       </select>
 
       <button

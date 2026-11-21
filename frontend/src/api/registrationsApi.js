@@ -1,23 +1,33 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-// Get registrations with filters and pagination
 export async function getRegistrations({
   participantName = '',
   type = '',
   status = '',
   page = 1,
   pageSize = 10,
+  signal,
 } = {}) {
   const params = new URLSearchParams({
-    participantName,
-    type,
-    status,
-    page: String(page),
-    pageSize: String(pageSize),
-  });
+  page: String(page),
+  pageSize: String(pageSize),
+});
+
+if (participantName.trim()) {
+  params.set('participantName', participantName.trim());
+}
+
+if (type) {
+  params.set('type', type);
+}
+
+if (status) {
+  params.set('status', status);
+}
 
   const response = await fetch(
-    `${API_BASE_URL}/api/registrations?${params}`
+    `${API_BASE_URL}/api/registrations?${params}`,
+    { signal }
   );
 
   if (!response.ok) {
@@ -27,10 +37,10 @@ export async function getRegistrations({
   return response.json();
 }
 
-// Get dashboard summary for KPI cards
-export async function getRegistrationSummary() {
+export async function getRegistrationSummary({ signal } = {}) {
   const response = await fetch(
-    `${API_BASE_URL}/api/registrations/summary`
+    `${API_BASE_URL}/api/registrations/summary`,
+    { signal }
   );
 
   if (!response.ok) {

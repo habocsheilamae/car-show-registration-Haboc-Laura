@@ -36,9 +36,16 @@ The dashboard runs at http://localhost:5173 (allowed by the API's CORS policy).
 
 ## API endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | /api/registrations | Create a registration |
-| GET | /api/registrations | List (paged; filters: participantName, type, status) |
-| GET | /api/registrations/{id} | Get one registration |
-| GET | /api/registrations/summary | KPI totals |
+| # | Method | Endpoint | Description | Success | Errors |
+|---|---|---|---|---|---|
+| 1 | POST | /api/registrations | Make a new registration | 201 Created | 400, 409 |
+| 2 | GET | /api/registrations | Show all registrations (paged) | 200 OK | 400 |
+| 3 | GET | /api/registrations/{id} | Find registration by ID | 200 OK | 404 |
+| 4 | GET | /api/registrations?type=Competitor | Find by type | 200 OK | 400 |
+| 5 | GET | /api/registrations?status=Confirmed | Find by status | 200 OK | 400 |
+| 6 | GET | /api/registrations?participantName=juan | Find by participant name (contains, case-insensitive) | 200 OK | 400 |
+| 7 | GET | /api/registrations/summary | KPI totals for the dashboard | 200 OK | — |
+
+NOTE:
+Endpoints 2, 4, 5 and 6 are the same route with optional query parameters 
+(`participantName`, `type`, `status`, `page`, `pageSize`). Filters work alone and combined.

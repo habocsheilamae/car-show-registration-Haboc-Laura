@@ -68,12 +68,12 @@ builder.Services.AddOpenApi(options =>
 var app = builder.Build();
 
 // Apply migrations + seed (enable AFTER creating the InitialCreate migration)
- using (var scope = app.Services.CreateScope())
- {
-     var dbContext = (AppDbContext)scope.ServiceProvider.GetRequiredService<IAppDbContext>();
-     dbContext.Database.Migrate();
-     // seeding comes later
- }
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = (AppDbContext)scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+    dbContext.Database.Migrate();
+    await DbSeeder.SeedAsync(dbContext);
+}
 
 app.UseCors("Frontend");
 

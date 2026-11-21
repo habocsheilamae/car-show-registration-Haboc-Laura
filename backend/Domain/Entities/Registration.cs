@@ -67,4 +67,6 @@ public class Registration : BaseEntity
     }
 
     public void SetStatus(RegistrationStatus status) => Status = status;
+    public void SetRegistrationDate(DateTime utc) =>
+    RegistrationDate = DateTime.SpecifyKind(utc, DateTimeKind.Utc);
 }

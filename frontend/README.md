@@ -1,16 +1,115 @@
-# React + Vite
+# AutoVista Events — Car Show Registration Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based frontend dashboard for managing participant registrations for **AutoVista Events Car Show 2027**, to be held at Sorsogon City Coliseum.
 
-Currently, two official plugins are available:
+## Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This dashboard provides an organized interface for viewing and monitoring car show registrations, participant information, registration statuses, and payment records.
 
-## React Compiler
+This project is developed as part of the Integrative Programming 2 course.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Technologies Used
 
-## Expanding the ESLint configuration
+- React JS
+- Vite
+- JavaScript
+- HTML5
+- CSS3
+- Git and GitHub
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+
+- Responsive registration dashboard
+- Five KPI summary cards:
+  - Total Registrations
+  - Total Payments
+  - Uncollected Payments
+  - Confirmed Registrations
+  - Checked In Participants
+- Registration records table
+- Search participants by name
+- Filter by registration type
+- Filter by registration status
+- Debounced search input
+- Pagination
+- Loading state
+- Empty state
+- Error state UI
+- Clear filters functionality
+- Accessible labels and navigation
+
+## Project Structure
+
+```text
+frontend/
+├── public/
+├── src/
+│   ├── api/
+│   │   ├── registrationsApi.js
+│   │   └── sample-data.js
+│   ├── components/
+│   │   ├── KpiCard.jsx
+│   │   ├── KpiCards.jsx
+│   │   ├── Pagination.jsx
+│   │   ├── PaymentBadge.jsx
+│   │   ├── RegistrationFilters.jsx
+│   │   ├── RegistrationTable.jsx
+│   │   └── StatusBadge.jsx
+│   ├── hooks/
+│   │   └── useDebounce.js
+│   ├── pages/
+│   │   └── RegistrationsPage.jsx
+│   ├── App.jsx
+│   ├── App.css
+│   ├── index.css
+│   └── main.jsx
+├── index.html
+├── package.json
+└── vite.config.js
+```
+
+## Installation and Setup
+
+### Prerequisites
+
+- Node.js
+- npm
+- Visual Studio Code (recommended)
+
+### 1. Navigate to the frontend directory
+
+```bash
+cd frontend
+```
+
+If you have already opened the frontend folder directly, you can skip this command.
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Start the development server
+
+```bash
+npm run dev
+```
+
+Open the local URL displayed in your terminal to view the dashboard.
+
+## Current Development Status
+
+The frontend dashboard currently uses sample registration data for development and testing.
+
+Backend API integration is pending verification of the backend endpoints and response format.
+
+## Repository
+
+GitHub: [Car Show Registration Project](https://github.com/habocsheilamae/car-show-registration-Haboc-Laura)
+
+Frontend Branch: `feature/frontend-dashboard`
+
+---
+
+Developed for Integrative Programming 2 — Car Show Registration System Project.

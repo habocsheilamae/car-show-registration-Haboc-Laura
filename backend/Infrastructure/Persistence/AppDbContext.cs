@@ -19,7 +19,11 @@ public sealed class AppDbContext : DbContext, IAppDbContext
             entity.Property(r => r.RegistrationNumber).IsRequired().HasMaxLength(20);
             entity.HasIndex(r => r.RegistrationNumber).IsUnique();
 
-            entity.Property(r => r.RegistrationDate).IsRequired();
+            entity.Property(r => r.RegistrationDate)
+            .IsRequired()
+            .HasConversion(
+                v => v,
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
             entity.Property(r => r.ParticipantName).IsRequired().HasMaxLength(150);
             entity.Property(r => r.ContactNumber).IsRequired().HasMaxLength(11);

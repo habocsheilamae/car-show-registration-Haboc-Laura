@@ -6,6 +6,8 @@ using FluentValidation;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using Api.Features.Registrations;
+using Application.Features.Registrations.CreateRegistration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,9 @@ builder.Services.AddDbContext<IAppDbContext, AppDbContext>(options =>
 builder.Services.AddValidatorsFromAssembly(typeof(IAppDbContext).Assembly);
 
 // Handlers
+builder.Services.AddScoped<
+    ICommandHandler<CreateRegistrationCommand, Result<CreateRegistrationResponse>>,
+    CreateRegistrationHandler>();
 // builder.Services.AddScoped<ICommandHandler<TCommand, Result<TResponse>>, TCommandHandler>();
 // builder.Services.AddScoped<IQueryHandler<TQuery, Result<TResponse>>, TQueryHandler>();
 
@@ -68,6 +73,6 @@ if (app.Environment.IsDevelopment())
 app.MapGet("/", () => "Welcome to the Car Show Registration API! Go to /scalar/v1 for API documentation.");
 
 // Map endpoints
-// app.MapRegistrationEndpoints();
+app.MapRegistrationEndpoints();
 
 app.Run();

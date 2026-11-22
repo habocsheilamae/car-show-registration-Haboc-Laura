@@ -33,6 +33,8 @@ Requires the .NET 10 SDK.
     npm run dev
 
 The dashboard runs at http://localhost:5173 (allowed by the API's CORS policy).
+`frontend/.env` already points to the backend (`VITE_API_BASE_URL=http://localhost:5205`).
+Start the backend first, then the frontend. Restart `npm run dev` after editing `.env`.
 
 ## API endpoints
 
@@ -44,7 +46,7 @@ The dashboard runs at http://localhost:5173 (allowed by the API's CORS policy).
 | 4 | GET | /api/registrations?type=Competitor | Find by type | 200 OK | 400 |
 | 5 | GET | /api/registrations?status=Confirmed | Find by status | 200 OK | 400 |
 | 6 | GET | /api/registrations?participantName=juan | Find by participant name (contains, case-insensitive) | 200 OK | 400 |
-| 7 | GET | /api/registrations/summary | KPI totals for the dashboard | 200 OK | — |
+| 7 | GET | /api/registrations/summary | KPI totals for the dashboard | 200 OK | ï¿½ |
 
 NOTE:
 Endpoints 2, 4, 5 and 6 are the same route with optional query parameters 
